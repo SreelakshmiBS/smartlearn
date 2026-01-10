@@ -141,13 +141,6 @@
         </option>
     {% endfor %}
 </select>
-
-            <label>Parent Name:</label>
-            <input type="text" name="parent_name" value="{{ student.parent.parent_name }}">
-
-            <label>Parent Contact:</label>
-            <input type="text" name="parent_contact" value="{{ student.parent.parent_contact }}">
-
             <label>Password:</label>
             <button type="button" onclick="window.location.href='{{ url_for('change_password') }}'">Change Password</button><br><br>
 
