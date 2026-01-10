@@ -1,0 +1,128 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ exam.title }} | SmartLearn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --primary: #082b75ff;
+            --secondary: #8db7e0ff;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background: #f4f6f9;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #8db7e0ff;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .exam-container {
+            max-width: 800px;
+            margin: 120px auto;
+            padding: 25px;
+            background: var(--secondary);
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+
+        h2.exam-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+
+        .question-card {
+            background: var(--text-light);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 8px;
+            accent-color: var(--accent);
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 20px auto 0 auto;
+            padding: 12px 25px;
+            background: var(--accent);
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--accent-hover);
+        }
+
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--secondary);
+            margin: 15px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="exam-container">
+    <h2 class="exam-title">{{ exam.title }}</h2>
+
+    {% if attended_date %}
+        <p class="info">You have already attended this exam on: {{ attended_date.strftime('%d-%m-%Y %I:%M %p') }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('submit_exam', exam_id=exam.id) }}">
+        {% for q in questions %}
+            <div class="question-card">
+                <p class="question-text">{{ loop.index }}. {{ q.question_text }}</p>
+                <div class="options">
+                    {% if q.option_a %}<label><input type="radio" name="{{ q.id }}" value="A"> {{ q.option_a }}</label>{% endif %}
+                    {% if q.option_b %}<label><input type="radio" name="{{ q.id }}" value="B"> {{ q.option_b }}</label>{% endif %}
+                    {% if q.option_c %}<label><input type="radio" name="{{ q.id }}" value="C"> {{ q.option_c }}</label>{% endif %}
+                    {% if q.option_d %}<label><input type="radio" name="{{ q.id }}" value="D"> {{ q.option_d }}</label>{% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit">Submit Exam</button>
+    </form>
+</div>
+
+</body>
+</html>

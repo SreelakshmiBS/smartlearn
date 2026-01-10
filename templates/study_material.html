@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Materials</title>
+
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --text-light: white;
+        }
+
+        body { background: var(--secondary); 
+              font-family: 'Inter', sans-serif;}
+
+        .box {
+            width: 90%;
+            margin: 40px auto;
+            padding: 25px;
+            background: #fff;
+            border-radius: 12px;
+        }
+
+        .subject-title {
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        a.download-btn {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 7px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2 style="color:var(--primary); text-align:center;">Study Materials</h2>
+
+    {% for subject, list in grouped.items() %}
+        <h3 class="subject-title">{{ subject }}</h3>
+
+        {% for m in list %}
+            <p>
+                <b>{{ m.title }}</b> —
+                <a href="{{ url_for('open_material', material_id=m.id) }}" class="download-btn">Open</a>
+            </p>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+</body>
+</html>

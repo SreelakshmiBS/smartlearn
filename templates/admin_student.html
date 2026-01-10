@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin | Students</title>
+
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+            --background: #f2f4f7;
+        }
+
+        /* ---------------- BODY ---------------- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #8db3ecff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ---------------- MAIN CONTENT ---------------- */
+        .main-content {
+            margin-left: 260px; /* sidebar width */
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        /* ---------------- FILTER BOX ---------------- */
+        .filter-box {
+            width: 90%;
+            margin: 0 auto 30px auto;
+            display: flex;
+            gap: 12px;
+            background: #8db3ecff;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* ---------------- TABLE ---------------- */
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: #8db3ecff;
+            border-radius: 15px;
+            overflow: hidden;
+            color: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            color: #082b75;   /* blue text for table data */
+        }
+
+        th {
+            background-color: var(--primary);
+            color: #ffffff;  
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            transition: 0.3s ease;
+        }
+
+        .no-data {
+            text-align: center;
+            font-style: italic;
+            color: #ffffff;
+        }
+
+        td button {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        td button:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ---------------- RESPONSIVE ---------------- */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .filter-box,
+            table {
+                width: 100%;
+            }
+
+            .filter-box {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    {% include "admin_sidebar.html" %}
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <h2>Student Data</h2>
+
+        <!-- 🔍 Search & Filter -->
+        <form method="get" class="filter-box">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search by name or email"
+                value="{{ request.args.get('search', '') }}"
+            >
+
+            <select name="course_id">
+                <option value="">All Courses</option>
+                {% for course in courses %}
+                    <option
+                        value="{{ course.id }}"
+                        {% if request.args.get('course_id') == course.id|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ course.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Search</button>
+
+            <a href="{{ url_for('admin_students') }}">
+                <button type="button">Reset</button>
+            </a>
+        </form>
+
+        <!-- 📋 Student Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Courses</th>
+                    <th>Student Progress</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if students %}
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>
+                            {% for course in student.courses %}
+                                {{ course.name }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin_student_progress', student_id=student.id) }}">
+                                <button>View Progress</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="no-data">No students found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>

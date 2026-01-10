@@ -1,0 +1,142 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ exam.title }} | Exam Result</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    :root {
+        --primary: #082b75ff;      /* Dark Blue */
+        --secondary: #8db7e0ff;    /* Light Blue */
+        --accent: #f7b500;         /* Gold */
+        --accent-hover: #ffcc33;   /* Hover Gold */
+        --text-primary: #ffffff;   /* White text */
+        --text-dark: #1b1b1b;      /* Dark text */
+        --background: #f4f6f9;     /* Page background */
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #8db7e0ff;
+        color: var(--text-dark);
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 120px auto;
+        background: var(--secondary);
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        color: var(--text-dark);
+    }
+
+    h1 {
+        color: var(--primary);
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    p {
+        margin: 5px 0;
+    }
+
+    h2 {
+        color: var(--primary);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 5px;
+    }
+
+    .question-block {
+        background: var(--text-primary);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .question-block p {
+        margin: 6px 0;
+    }
+
+    .correct {
+        color: green;
+        font-weight: bold;
+    }
+
+    .incorrect {
+        color: red;
+        font-weight: bold;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 25px;
+    }
+
+    .btn {
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 14px;
+        color: var(--text-primary);
+        background: var(--primary);
+        transition: 0.3s ease;
+    }
+
+    .btn:hover {
+        background: var(--accent);
+        color: var(--text-dark);
+    }
+
+    hr {
+        border: 0;
+        height: 1px;
+        background: var(--secondary);
+        margin: 10px 0;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Exam Result: {{ exam.title }}</h1>
+    <p><strong>Date Attended:</strong> {{ attempt.attended_date.strftime('%B %d, %Y %H:%M') if attempt else 'N/A' }}</p>
+    <p><strong>Score:</strong> {{ result.score }} / {{ result.total }}</p>
+
+    <h2>Answers:</h2>
+    {% for question in exam.questions %}
+        <div class="question-block">
+            <p><strong>{{ loop.index }}. {{ question.question_text }}</strong></p>
+            <p>Correct Answer: <span class="correct">{{ question.correct_option }}</span></p>
+            <p>Your Answer: 
+                {% if question.id in student_answers %}
+                    {% if student_answers[question.id] == question.correct_option %}
+                        <span class="correct">{{ student_answers[question.id] }}</span>
+                    {% else %}
+                        <span class="incorrect">{{ student_answers[question.id] }}</span>
+                    {% endif %}
+                {% else %}
+                    Not Answered
+                {% endif %}
+            </p>
+            <hr>
+        </div>
+    {% endfor %}
+
+    <!-- Buttons -->
+    <div class="btn-group">
+        <a href="{{ url_for('student_exams') }}" class="btn">⬅ Back to Exams</a>
+    </div>
+
+</div>
+</body>
+</html>

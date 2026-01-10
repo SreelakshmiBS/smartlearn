@@ -1,0 +1,132 @@
+<style>
+       :root {
+    --sidebar-bg-start: #0b2d6f;
+    --sidebar-bg-end: #082b75;
+    --active-bg: #6f6bdc;
+    --text-white: #ffffff;
+    --text-muted: #cfd6ff;
+    --accent-yellow: #f7b500;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: linear-gradient(180deg, var(--sidebar-bg-start), var(--sidebar-bg-end));
+    padding: 25px 18px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.25);
+}
+
+/* Logo */
+.sidebar-logo {
+    margin-bottom: 35px;
+}
+
+.logo-header a {
+    color: var(--accent-yellow);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+/* Nav */
+.sidebar .nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar .nav-item {
+    margin-bottom: 14px;
+}
+
+/* Links */
+.sidebar .nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    color: var(--text-white);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Icons */
+.sidebar .nav-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Hover */
+.sidebar .nav-item a:hover {
+    background: #f7b500;
+}
+
+.sidebar .nav-item.active a {
+    background: #6f6bdc;
+    
+}
+
+/* Text spacing fix */
+.sidebar .nav-item p {
+    margin: 0;
+}
+
+
+    </style>
+</head>
+
+<body>
+<div class="wrapper">
+
+    <!-- Sidebar -->
+    <div class="sidebar sidebar-style-2">
+        <div class="sidebar-logo">
+            <div class="logo-header">
+                <a href="{{ url_for('home') }}">SMARTLEARN</a>
+            </div>
+        </div>
+
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+            <ul class="nav nav-secondary">
+                <li class="nav-item active">
+                    <a href="{{ url_for('admin_index') }}">
+                        <i class="fas fa-home"></i><p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_add_course') }}">
+                        <i class="fas fa-layer-group"></i><p>Add Course</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('view_course') }}">
+                        <i class="fas fa-eye"></i><p>View Courses</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_students') }}">
+                        <i class="fas fa-users"></i><p>Students</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_teachers') }}">
+                        <i class="fas fa-user-tie"></i><p>Teachers</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('admin_material') }}">
+                        <i class="fas fa-book"></i><p>Study Materials</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>

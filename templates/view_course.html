@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course List</title>
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background: #8db7e0ff;
+        }
+
+        body {
+              font-family: 'Inter', sans-serif;
+            background: var(--background);
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 20px;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width:1100px;
+            margin: 30px auto;
+            background: var(--text-light);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--text-light);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+            margin-top: 20px;
+        }
+
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: #082b75;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-delete:hover {
+            background: #b52b27;
+        }
+
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--primary);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 12px;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    {% include "admin_sidebar.html" %}
+
+<!-- Flash messages popup -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div id="popup">
+        {{ messages[0] }}
+        <br><br>
+        {% if session.get('deleted_course') %}
+<form action="{{ url_for('undo_delete_course') }}" method="POST">
+    <button type="submit" class="btn btn-success">Undo</button>
+</form>
+{% endif %}
+
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var popup = document.getElementById("popup");
+            if (popup) popup.style.display = "none";
+        }, 5000);
+    </script>
+  {% endif %}
+{% endwith %}
+
+<h2>Available Courses</h2>
+
+{% if courses %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course Name</th>
+            <th>Description</th>
+            <th>Teacher </th>
+            <th>Teacher Profile</th>
+            <th>Action</th>
+            <th></th>
+        </tr>
+
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.id }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.description }}</td>
+                        <td>
+                {% if course.teachers %}
+                    {% for teacher in course.teachers %}
+                        {{ teacher.name }}<br>
+                    {% endfor %}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
+            <td>
+                {% if course.teachers %}
+                    {% for teacher in course.teachers %}
+                        <a class="btn" href="{{ url_for('admin_teacher_profile', teacher_id=teacher.id) }}">View Profile</a><br>
+                    {% endfor %}
+                {% else %}
+                    N/A
+                {% endif %}
+    
+            <td>
+                <form method="POST" action="{{ url_for('delete_course', id=course.id) }}">
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </td>
+            <td>
+                <!-- ✅ Edit button now uses a GET link -->
+                <a href="{{ url_for('edit_course', id=course.id) }}" class="btn-delete">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="btn-container">
+    <a href="{{ url_for('admin_index') }}" class="btn">← Back to Dashboard</a>
+    <a href="{{ url_for('admin_add_course') }}" class="btn">Add course</a>
+
+</div>
+
+{% else %}
+<p style="text-align:center;">No courses found.</p>
+{% endif %}
+
+</body>
+</html>

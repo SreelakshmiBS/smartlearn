@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Study Material</title>
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+        }
+
+        body {
+            background: var(--secondary);
+              font-family: 'Inter', sans-serif;
+        }
+
+        .form-box {
+            margin: 40px auto;
+            width: 90%;
+            max-width: 1000px;
+            background-color:  #8db3ecff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+        }
+
+        label {
+            margin-top: 15px;
+            font-weight: 600;
+            display: block;
+        }
+
+        input,textarea {
+            width: 98%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+            margin-top: 5px;
+        }
+        select{
+            width:100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+            margin-top: 5px;
+        }
+        .upload{
+             width:100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid var(--secondary);
+            margin-top: 5px;
+
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover { background: var(--accent-hover); }
+    </style>
+</head>
+
+<body>
+    <div class="form-box">
+        <h2>Upload Study Material</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+    <label>Select Course</label>
+    <select name="course_id" required>
+        <option value="">-- Select a Course --</option>
+        {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Title</label>
+    <input type="text" name="title" required>
+
+    <label>Description</label>
+    <textarea name="description"></textarea>
+
+    <label>Upload File</label>
+    <input type="file" name="file" class='upload' required>
+
+    <button type="submit">Upload</button>
+</form>
+
+    </div>
+</body>
+</html>

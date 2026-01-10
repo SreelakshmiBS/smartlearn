@@ -1,0 +1,43 @@
+
+.logologo{
+color: #f7b500;
+font-weight: bold;
+font-size: 22px;
+text-decoration: none;
+}
+
+.logologo:hover {
+color: #00026e;
+}
+.dashboard-horizontal {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* responsive */
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 180px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.stat-card h2 {
+    color: #6a0dad;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    font-size: 14px;
+    color: #555;
+}
+.stat-card .icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #f7b500;
+}

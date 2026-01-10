@@ -1,0 +1,220 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Classes | SmartLearn</title>
+   <style>
+    :root {
+        --primary: #082b75;
+        --secondary: #8db7e0;
+        --accent: #f7b500;
+        --accent-hover: #ffcc33;
+        --text-light: #ffffff;
+        --background: #8db7e0ff;
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--text-light);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        
+        background-color: var(--primary);
+        color: var(--text-light);
+        text-align: center;
+        padding: 20px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    header h1 {
+        
+        width: 100%;
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        color: var(--primary);
+        margin: 40px 0;
+        font-size: 32px;
+    }
+
+    .class-container {
+        margin: 120px auto;
+        width: 90%;
+        max-width: 1100px;
+        background-color:#8db7e0 ;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .class-section {
+        margin-bottom: 50px;
+    }
+
+    .class-section h3 {
+        width: 100%;
+        text-align: center;
+        color: var(--primary);
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+
+    .add-class {
+        display: inline-block;
+        margin-bottom: 15px;
+        background-color: var(--accent);
+        color: var(--primary);
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .add-class:hover {
+        background-color: var(--accent-hover);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        color: var(--text-light);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    th, td {
+        
+        padding: 15px;
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    th {
+        
+        background-color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.95rem;
+    }
+
+    
+    tr:hover {
+        background-color: var(--accent);
+        color: var(--primary);
+        transition: 0.3s ease;
+    }
+
+    .btn {
+        background-color: var(--primary);
+        color: var(--text-light);
+        padding: 8px 14px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: var(--accent);
+        color: var(--primary);
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 30px;
+        font-size: 1.1rem;
+        color: #aaa;
+    }
+
+    @media (max-width: 900px) {
+        th, td {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .add-class {
+            padding: 8px 14px;
+            font-size: 14px;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="class-container">
+        <h2>Manage Classes</h2>
+
+        <!-- Live Classes Section -->
+        <div class="class-section">
+            <center><h3>Live Classes</h3>
+            <a href="{{ url_for('upload_live_class') }}" class="add-class">+ Schedule Live Class</a></center>
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Platform/Link</th>
+                    <th>Action</th>
+                    <th></th>
+                </tr>
+                {% for cls in live_classes %}
+                <tr>
+                    <td>{{ cls.title }}</td>
+                    <td>{{ cls.date }}</td>
+                    <td>{{ cls.time.strftime("%H:%M") }}</td>
+                    <td><a href={{ cls.link }} class="btn" target="_blank">Join</a></td>
+                    <td><a href={{ url_for('edit_live_class', id=cls.id) }} class="btn">Edit</a></td>
+                    <td><a href={{ url_for('delete_live_class', id=cls.id) }} class="btn">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </table><br>
+
+            <!-- Recorded Classes Section -->
+        <div class="class-section">
+        <center>
+            <h3>Recorded Classes</h3>
+            <a href={{ url_for('upload_recorded_class') }} class="add-class">+ Add Recorded Class</a>
+        </center>
+
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Filename</th>
+                <th>View Video</th>
+                <th>Action</th>
+                <th> </th>
+            </tr>
+
+            {% for cls in recorded_classes %}
+           
+                <td>{{ cls.title }}</td>
+                <td>{{ cls.date }}</td>
+                <td>{{ cls.filename }}</td>
+                <td>
+                <a href={{ url_for('static', filename='uploads/videos/' + cls.filename) }} 
+                class="btn" target="_blank">
+                View Video
+                </a>
+            </td>
+                <td><a href={{ url_for('edit_recorded_class', id=cls.id) }} class="btn">Edit</a></td>
+                <td><a href={{ url_for('delete_recorded_class', id=cls.id) }} class="btn">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

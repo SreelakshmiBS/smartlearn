@@ -1,0 +1,108 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrolled Courses</title>
+    <style>
+        :root {
+            --primary: #8db7e0ff;
+            --secondary: #082b75ff;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary);
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--secondary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            margin:120px,auto;
+            background-color: var(--secondary);
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+        }
+
+        .course-card h2 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .course-card p {
+            margin: 6px 0;
+            font-size:
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--secondary);
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+
+<h1>{{ student.name }}'s Enrolled Courses</h1>
+
+{% if courses %}
+    <div class="course-grid">
+        {% for course in courses %}
+            <div class="course-card">
+                <h2>{{ course.name }}</h2>
+                <p><strong>Description:</strong> {{ course.description }}</p>
+                <p><strong>Start Date:</strong> {{ course.start_date }}</p>
+                <p><strong>Teacher(s):</strong>
+                    {% for teacher in course.teachers %}
+                        {{ teacher.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p style="text-align:center;">No courses enrolled yet.</p>
+{% endif %}
+
+<div class="btn-container">
+    <a class="btn" href="{{ url_for('courses') }}">Enroll New Courses</a>
+</div>
+
+</body>
+</html>

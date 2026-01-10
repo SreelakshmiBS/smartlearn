@@ -1,0 +1,198 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <meta charset="UTF-8">
+  <title>Mark Attendance</title>
+
+  <style>
+    :root {
+      --primary: #8db7e0ff;
+      --secondary: #082b75ff;
+      --accent: #f7b500;
+      --accent-hover: #ffcc33;
+      --text-primary: #1c1c1c;
+      --text-secondary: #000000ff;
+      --input-bg: #f2f4f7;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--primary);
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    /* Headings */
+    .page-title {
+      margin-top: 120px;
+      text-align: center;
+      color: var(--secondary);
+      font-weight: bold;
+    }
+
+    .date {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    /* Table */
+    table {
+      margin: 0 auto;
+      width: 95%;
+      max-width: 1000px;
+      background-color: #8db3ecff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    select {
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    /* Center actions */
+    .center-actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    /* Buttons (used for both button & link) */
+    .btn-action {
+      background-color: var(--accent);
+      color: #082b75ff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin: 10px;
+      font-weight: bold;
+    }
+
+    .btn-action:hover {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    /* Modal styling */
+    .modal-header {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+    }
+
+    .modal-footer {
+      justify-content: center;
+    }
+
+    .btn-custom-ok {
+      background-color: var(--secondary);
+      color: white;
+      border-radius: 8px;
+      padding: 8px 20px;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2 class="page-title">Mark Attendance</h2>
+  <h4 class="date">Date: {{ today }}</h4>
+
+  <form method="POST">
+
+    <table>
+      <tr>
+        <th>Student Name</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+
+      {% for student in students %}
+      <tr>
+        <td>{{ student.name }}</td>
+        <td>
+          <select name="status_{{ student.id }}">
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+          </select>
+        </td>
+        <td>{{ today }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="center-actions">
+      <button type="submit" class="btn-action">
+        Submit Attendance
+      </button>
+
+      <a href="{{ url_for('teacher_dashboard') }}" class="btn-action">
+        Back to Dashboard
+      </a>
+    </div>
+
+  </form>
+
+  <!-- Success Modal -->
+  <div class="modal fade" id="attendanceSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Success</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          Attendance has been marked successfully!
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-custom-ok" data-bs-dismiss="modal">
+            OK
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {% if success %}
+  <script>
+    const successModal = new bootstrap.Modal(
+      document.getElementById('attendanceSuccessModal')
+    );
+    successModal.show();
+  </script>
+  {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Study Material</title>
+
+    <style>
+        :root {
+            --primary: #082b75;      /* Dark blue */
+            --secondary: #8db7e0;    /* Light blue */
+            --accent: #f7b500;       /* Gold buttons */
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+            --text-secondary: #d1d1d1;
+            --background: #8db7e0ff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:#8db7e0;
+            padding: 30px;
+            font : #082b75;
+        }
+
+        .container {
+            width: 500px;
+            margin: auto;
+            background: #8db3ecff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background:  #f7b500;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3539b9;
+        }
+
+        .current-file {
+            color= #ffff
+            font-size: 14px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Edit Study Material</h2>
+
+        <form action="{{ url_for('edit_material', id=material.id) }}" method="POST" enctype="multipart/form-data">
+            
+            <!-- Title -->
+            <label>Title</label>
+            <input type="text" name="title" value="{{ material.title }}" required>
+
+            <!-- Description -->
+            <label>Description</label>
+            <textarea name="description" required>{{ material.description }}</textarea>
+
+            <!-- Subject Dropdown -->
+            <label>Subject</label>
+            <select name="subject" required>
+    <option value="">-- Select Subject --</option>
+
+    <option value="Python">Python</option>
+    <option value="Artificial Intelligence">Artificial Intelligence</option>
+    <option value="Machine Learning">Machine Learning</option>
+    <option value="Data Science">Data Science</option>
+    <option value="Computer Networks">Computer Networks</option>
+    <option value="Cyber Security">Cyber Security</option>
+    <option value="Database Management">Database Management</option>
+    <option value="Web Development">Web Development</option>
+    <option value="Cloud Computing">Cloud Computing</option>
+    <option value="Operating Systems">Operating Systems</option>
+
+</select>
+
+            <!-- File Upload -->
+            <label>Replace File (Optional)</label>
+            <input type="file" name="file">
+
+            {% if material.file_path %}
+            <p class="current-file">
+                Current File: 
+                <a href="{{ url_for('static', filename='materials/' ~ material.file_path) }}" target="_blank">
+                    {{ material.file_path }}
+                </a>
+            </p>
+            {% endif %}
+
+            <button type="submit">Update Material</button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

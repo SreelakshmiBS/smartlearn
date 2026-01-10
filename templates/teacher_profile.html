@@ -1,0 +1,129 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Profile</title>
+    <style>
+        :root {
+            --primary: #082b75;    /* Deep blue */
+            --secondary: #8db7e0;  /* Light blue */
+            --accent: #f7b500;     /* Gold button */
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background:  #8db7e0ff; /* Light blue background */
+        }
+
+        body {
+            background-color: var(--background);
+              font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: 120px auto;
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        .profile-card p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .profile-card p strong {
+            color: var(--accent);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-hover);
+        }
+        .profile-img {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #082b75ff;
+        margin-bottom: 15px;
+        margin: 0 auto 15px auto;   /* CENTER HORIZONTALLY */
+        display: block; 
+        }
+
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <h2>Edit Profile</h2>
+        <img src={{ url_for('static', filename='photos/' + (teacher.photo )) }}
+             class="profile-img">
+        
+        <p><strong>Teacher Name:</strong> {{ teacher.name }}</p>
+        <p><strong>Email:</strong> {{ teacher.email }}</p>
+        <p><strong>Qualifications:</strong> {{ teacher.qualifications }}</p>
+        <p><strong>Subjects Assigned:</strong></p>
+        {% if teacher.courses %}
+            <ul style="margin-top: 5px; padding-left: 20px;">
+                {% for course in teacher.courses %}
+                    <li style="font-size: 17px; line-height: 1.6;">
+                        {{ course.name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No subjects assigned yet.</p>
+        {% endif %}
+
+        <p><strong>Experience:</strong> {{ teacher.years_of_experience  }}</p>
+        <p><strong>Contact:</strong> {{ teacher.contact }}</p>
+        <p><strong>Place:</strong> {{ teacher.place }}</p>
+
+        <a href={{ url_for('teacher_dashboard') }} class="back-btn">← Back to Dashboard</a>
+
+        <a href={{ url_for('teacher_edit_profile') }} class="back-btn">Edit your profile</a>
+
+    </div>
+</body>
+</html>

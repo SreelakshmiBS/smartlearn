@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Dashboard | SmartLearn</title>
+  <style>
+    :root {
+      --primary: #082b75;        /* Deep blue */
+      --secondary: #8db7e0;      /* Light blue */
+      --accent: #f7b500;         /* Gold button */
+      --accent-hover: #ffcc33;
+      --text-light: #ffffff;
+      --text-dark: #ffffff;
+      --bg-light: #8db7e0ff;     /* Page background */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      font-family: 'Segoe UI', sans-serif
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 230px;
+      background-color: var(--primary);
+      height: 100vh;
+      padding: 30px 15px;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      color: var(--accent);
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: var(--text-light);
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: 0.3s ease;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: var(--accent);
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .sidebar .profile-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: #082b75;
+      padding: 12px;
+      border-radius: 12px;
+      transition: 0.3s ease;
+    }
+
+    .sidebar .profile-link:hover {
+      background-color: #082b75;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .profile-name {
+      color: var(--text-light);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .logout a {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      background-color: var(--accent);
+      color: var(--primary);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    .logout a:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 230px;
+      padding: 40px;
+      flex: 1;
+    }
+
+    header {
+      background-color: #082b75ff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      color: var(--text-light);
+      font-size: 22px;
+    }
+
+    header span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+   .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* exactly 3 columns */
+            gap: 25px;
+        }
+
+    .card {
+      background: var(--primary);
+      color: var(--text-light);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      transition: 0.3s ease-in-out;
+    }
+
+    .card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    .card p {
+      font-size: 15px;
+      margin-bottom: 15px;
+      color: #cfd4e0;
+    }
+
+    .card a {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: var(--accent);
+      color: var(--primary);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    .card a:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>
+      <h2>SmartLearn</h2>
+      <a  href={{ url_for('teacher_profile') }} class="profile-link">
+        <img src={{ url_for('static', filename='photos/' + (teacher.photo)) }} class="profile-img" alt="Profile Picture">
+        <span class="profile-name">{{ teacher.name }}'s Profile</span>
+      </a>
+
+      <ul>
+        <li><a href={{ url_for('teacher_students') }}>View All Students</a></li>
+        <li><a href={{ url_for('manage_class') }}>Manage Classes</a></li>
+        <li><a href="#">Create Exams</a></li>
+        <li><a href="#">View Feedback</a></li>
+        <li><a class="active" href="/logout">Logout</a></li>
+      </ul>
+    </div>
+     
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <header>
+      <h1>Welcome, <span>{{ teacher.name }}</span></h1>
+      <p>{{ datetime.now().strftime('%B %d, %Y') }}</p>
+    </header>
+
+    <section class="card-grid">
+
+  <div class="card">
+    <h3>View All Students</h3>
+    <p>Access the complete student list and profiles.</p>
+    <a href="{{ url_for('teacher_students') }}">View</a>
+  </div>
+
+  <div class="card">
+    <h3>Manage Classes</h3>
+    <p>Organize your course schedule and track enrolled students.</p>
+    <a href="{{ url_for('manage_class') }}">Open</a>
+  </div>
+
+  <div class="card">
+    <h3>Mark Attendance</h3>
+    <p>Track and update student attendance details.</p>
+    <a href="{{ url_for('mark_attendance') }}">Open</a>
+  </div>
+
+  <div class="card">
+    <h3>Upload and Manage Study Material</h3>
+    <p>Upload PDFs, notes, or resources for your students.</p>
+    <a href="{{ url_for('upload_material') }}">Upload</a>
+    <a href="{{ url_for('manage_materials') }}">Manage</a>
+  </div>
+
+  <div class="card">
+    <h3>Create Exam</h3>
+    <p>Create exams and view created exams.</p>
+    <a href="{{ url_for('create_exam') }}" class="btn">Create</a>
+    <a href="{{ url_for('created_exams') }}" class="btn">View Created Exams</a>
+  </div>
+
+  <div class="card">
+    <h3>Student Progress</h3>
+    <p>View all students progress.</p>
+    <a href="{{ url_for('teacher_student_progress_table') }}" class="btn">
+      View
+    </a>
+  </div>
+
+   <div class="card">
+    <h3>Students Feedback</h3>
+    <p>View Students feedback</p>
+    <a href="{{ url_for('teacher_feedbacks') }}" class="btn">
+      View
+    </a>
+  </div>
+
+</section>
+
+
+
+      
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Progress</title>
+
+    <style>
+        :root {
+            --primary: #8db7e0ff;
+            --secondary: #082b75ff;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-primary: #1c1c1c;
+            --text-secondary: #000000ff;
+            --input-bg: #f2f4f7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+
+            text-align: center;
+            margin-top: 120px;
+            color: var(--secondary);
+        }
+
+        table {
+            width: 80%;
+            margin: 120px auto;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        th {
+            background: var(--secondary);
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-size: 0.9rem;
+        }
+
+        tr:nth-child(even) {
+            background: var(--input-bg);
+        }
+
+        tr:hover {
+            background: var(--accent);
+            color: var(--secondary);
+            transition: 0.3s ease;
+        }
+
+        .btn {
+            background: var(--accent);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Student Progress</h2>
+
+<table>
+    <tr>
+        <th>Student Name</th>
+        <th>Progress (%)</th>
+        <th>View</th>
+    </tr>
+
+    {% for s in student_progress %}
+    <tr>
+        <td>{{ s.name }}</td>
+        <td>{{ s.progress }}%</td>
+        <td>
+            <a href="{{ url_for('teacher_student_progress_view', student_id=s.id) }}"
+               class="btn">
+                View
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

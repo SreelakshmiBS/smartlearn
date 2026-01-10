@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background: #8db7e0ff;
+        }
+
+        body {
+            background-color: var(--background);
+              font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-card {
+            max-width: 650px;
+            margin: 60px auto;
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        .profile-card label {
+            font-weight: bold;
+            color: var(--text-light);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .profile-card input
+         {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+            background-color: white;
+            color: var(--text-dark);
+        }
+        
+        .profile-card select{
+            width: 104%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+            background-color: white;
+            color: var(--text-dark);
+        }
+
+        .profile-card button {
+            width: 105%;
+            padding: 14px;
+            background-color: var(--accent);
+            color: var(--primary);
+            border: none;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .profile-card button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-hover);
+        }
+
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent);
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-card">
+
+        <a href="{{ url_for('student_profile') }}" class="back-btn">← Back to Profile</a>
+
+        <h2>Edit Profile</h2>
+
+        <form method="POST">
+
+            <label>Name:</label>
+            <input type="text" name="name" value="{{ student.name }}" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" value="{{ student.email }}" required>
+
+            <label>Age:</label>
+            <input type="number" name="age" value="{{ student.age }}">
+
+            <label>Grade:</label>
+            <input type="text" name="grade" value="{{ student.grade }}">
+
+            <!-- FIXED COURSE SELECTION DROPDOWN -->
+            <label>Course:</label>
+            <select name="course" required>
+    <option value="" disabled selected>Select a course</option>
+
+    {% for course in courses %}
+        <option value="{{ course.id }}" 
+            {% if student.course_id == course.id %}selected{% endif %}>
+            {{ course.name }}
+        </option>
+    {% endfor %}
+</select>
+
+            <label>Parent Name:</label>
+            <input type="text" name="parent_name" value="{{ student.parent.parent_name }}">
+
+            <label>Parent Contact:</label>
+            <input type="text" name="parent_contact" value="{{ student.parent.parent_contact }}">
+
+            <label>Password:</label>
+            <button type="button" onclick="window.location.href='{{ url_for('change_password') }}'">Change Password</button><br><br>
+
+
+            <button type="submit">Update Profile</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

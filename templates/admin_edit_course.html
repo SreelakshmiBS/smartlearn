@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Study Material</title>
+
+<style>
+    :root {
+        --primary: #082b75;        /* Dark blue */
+        --secondary: #8db7e0;      /* Light blue */
+        --accent: #f7b500;         /* Gold buttons */
+        --accent-hover: #ffcc33;
+        --text-light: #ffffff;
+        --text-secondary: #d1d1d1;
+        --background: #e6f0fc;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #8db7e0;
+        padding: 40px 20px;
+        color: var(--primary);
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.2s;
+    }
+
+    .container:hover {
+        transform: translateY(-3px);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: var(--primary);
+        font-size: 28px;
+    }
+
+    label {
+        display: block;
+        margin-top: 20px;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    input, textarea, select {
+        width: 97%;
+        margin-top: 8px;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 5px rgba(8, 43, 117, 0.3);
+        outline: none;
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 30px;
+        padding: 14px;
+        background: var(--accent);
+        border: none;
+        border-radius: 8px;
+        color: var(--text-light);
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+        background: var(--accent-hover);
+        transform: scale(1.02);
+    }
+
+    .current-file {
+        color: var(--primary);
+        font-size: 14px;
+        margin-top: 8px;
+        font-style: italic;
+    }
+</style>
+</head>
+<body>
+
+{% include "admin_sidebar.html" %}
+
+<div class="container">
+    <h2>Edit Study Material</h2>
+    <form method="POST">
+        <label>Course Name</label>
+        <input type="text" name="name" value="{{ course.name }}" required>
+
+        <label>Description</label>
+        <textarea name="description" required>{{ course.description }}</textarea>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+</body>
+</html>

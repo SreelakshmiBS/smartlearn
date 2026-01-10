@@ -1,0 +1,229 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Classes</title>
+    <style>
+    :root {
+        --primary: #082b75;
+        --secondary: #8db7e0;
+        --accent: #f7b500;
+        --accent-hover: #ffcc33;
+        --text-light: #ffffff;
+        --background: #8db7e0;
+    }
+    body {
+        background-color: var(--background);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .box {
+        margin: 120px auto;
+        width: 90%;
+        max-width: 1100px;
+        background-color:  #8db3ecff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    h2 {
+        text-align: center;
+        color: var(--primary);
+        margin-top: 120px;
+    }
+    table {
+        width: 80%;
+        margin: 120px auto;
+        border-collapse: collapse;
+        background: #8db3ecff;
+        border-radius: 15px;
+        overflow: hidden; 
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    th, td {
+        
+        padding: 15px;
+        text-align: center;
+        color: var(--text-light);
+        
+    }
+
+    th {
+        
+        background-color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.95rem;
+    }
+
+    
+    tr:hover {
+        background-color: var(--accent);
+        color: var(--primary);
+        transition: 0.3s ease;
+    }
+    .btn {
+        padding: 8px 14px;
+        background: var(--primary);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+    .btn:hover {
+        background: var(--accent);
+        color: var(--primary);
+    }
+    /* Custom checkbox styling */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+    user-select: none;
+    color: #082b75; /* primary color */
+}
+
+/* Hide the default checkbox */
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkmark */
+.custom-checkbox .checkmark {
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border: 2px solid #082b75; /* primary color */
+    border-radius: 6px; /* rounded edges */
+    margin-right: 10px;
+    transition: all 0.2s ease;
+    display: inline-block;
+    position: relative;
+}
+
+/* Tick mark */
+.custom-checkbox .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #082b75;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Show tick when checked */
+.custom-checkbox input:checked ~ .checkmark::after {
+    display: block;
+}
+
+/* Hover effect */
+.custom-checkbox:hover .checkmark {
+    background-color: #8db7e0; /* secondary color */
+    border-color: #082b75;
+}
+
+    </style>
+</head>
+
+<body>
+
+<h2>Recorded Classes</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Course</th>
+        <th>Watch</th>
+        <th>Mark Completed</th>
+    </tr>
+    {% for cls in recorded_classes %}
+    <tr>
+        <td>{{ cls.title }}</td>
+        <td>{{ cls.date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ cls.course.name if cls.course else 'N/A' }}</td>
+        <td>
+            <a href="{{ url_for('static', filename='uploads/videos/' + cls.filename) }}"
+               target="_blank" class="btn">Watch</a>
+        </td>
+        <td>
+    {% if recorded_progress.get(cls.id) %}
+        ✔ Completed on {{ recorded_dates[cls.id].strftime('%d-%m-%Y') }}
+    {% else %}
+        <input type="checkbox"
+            onchange="markCompleted('recorded', {{ cls.id }}, this.checked)">
+        <span class="checkmark"></span> Mark as Completed
+    {% endif %}
+</td>
+
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="4">No recorded classes available</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Live Classes</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Course</th>
+        <th>Join</th>
+        <th>Mark Completed</th>
+    </tr>
+    {% for cls in live_classes %}
+    <tr>
+        <td>{{ cls.title }}</td>
+        <td>{{ cls.date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ cls.time.strftime('%H:%M') }}</td>
+        <td>{{ cls.course.name if cls.course else 'N/A' }}</td>
+        <td>
+            <a href="{{ cls.link }}" target="_blank" class="btn">Join</a>
+        </td>
+        <td>
+    {% if live_progress.get(cls.id) %}
+        ✔ Completed on {{ live_dates[cls.id].strftime('%d-%m-%Y') }}
+    {% else %}
+        <input type="checkbox"
+            onchange="markCompleted('live', {{ cls.id }}, this.checked)">
+        <span class="checkmark"></span> Mark as Completed
+    {% endif %}
+</td>
+
+        
+ 
+
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No live classes available</td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+function markCompleted(type, id, completed) {
+    fetch("/update_progress", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `type=${type}&id=${id}&completed=${completed}`
+    });
+}
+</script>
+
+
+
+</body>
+</html>

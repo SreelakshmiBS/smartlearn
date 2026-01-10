@@ -1,0 +1,216 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Progress</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background: #8db7e0ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 30px;
+            font-size: 1.6rem;
+        }
+
+        .progress-container {
+            max-width: 700px;
+            margin: 130px auto;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .box {
+            width: 120px;
+            height: 50px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            font-size: 0.9rem;
+            background: #fff;
+        }
+
+        .box.completed {
+            background: var(--primary);
+            color: var(--text-light);
+        }
+
+        .box input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        #progressChart {
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .btn-save:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="progress-container">
+    <h2>{{ student.name }}'s Progress</h2>
+
+    <!-- Chart -->
+    <canvas id="progressChart"></canvas>
+
+    <form method="POST">
+
+        <!-- Study Materials -->
+        <div class="section">
+            <h3>Study Materials</h3>
+            <div class="boxes">
+                {% for material in materials %}
+                <label class="box {% if material_progress.get(material.id) %}completed{% endif %}">
+                    <input type="box" name="material_{{ material.id }}"
+                           {% if material_progress.get(material.id) %}checked{% endif %}>
+                    <span>{{ material.title }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recorded Classes -->
+        <div class="section">
+            <h3>Recorded Classes</h3>
+            <div class="boxes">
+                {% for rc in recorded_classes %}
+                <label class="box {% if recorded_progress.get(rc.id) %}completed{% endif %}">
+                    <input type="box" name="recorded_{{ rc.id }}"
+                           {% if recorded_progress.get(rc.id) %}checked{% endif %}>
+                    <span>{{ rc.title }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Live Classes -->
+        <div class="section">
+            <h3>Live Classes</h3>
+            <div class="boxes">
+                {% for lc in live_classes %}
+                <label class="box {% if live_progress.get(lc.id) %}completed{% endif %}">
+                    <input type="box" name="live_{{ lc.id }}"
+                           {% if live_progress.get(lc.id) %}checked{% endif %}>
+                    <span>{{ lc.title }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Exams -->
+        <div class="section">
+            <h3>Exams</h3>
+            <div class="boxes">
+                {% for ex in exams %}
+                <label class="box {% if exam_progress.get(ex.id) %}completed{% endif %}">
+                    <input type="box" name="exam_{{ ex.id }}"
+                           {% if exam_progress.get(ex.id) %}checked{% endif %}>
+                    <span>{{ ex.title }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn-save">Save Progress</button>
+    </form>
+</div>
+
+<script>
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Pending'],
+            datasets: [{
+                data: [{{ progress }}, {{ 100 - progress }}],
+                backgroundColor: ['#082b75', '#f7b500']
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    const boxes = document.querySelectorAll('.box input');
+
+    function updateChart() {
+        const total = boxes.length;
+        const completed = [...boxes].filter(b => b.checked).length;
+        const percent = Math.round((completed / total) * 100);
+        chart.data.datasets[0].data = [percent, 100 - percent];
+        chart.update();
+    }
+
+    boxes.forEach(b => {
+        b.addEventListener('change', () => {
+            b.parentElement.classList.toggle('completed', b.checked);
+            updateChart();
+        });
+    });
+</script>
+
+</body>
+</html>

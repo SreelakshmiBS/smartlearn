@@ -1,0 +1,91 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Manage Study Materials</title>
+<style>
+    :root {
+        --primary: #082b75;
+        --secondary: #8db7e0;
+        --accent: #f7b500;
+        --text-light: #ffffff;
+    }
+
+    body {
+        background: var(--secondary);
+        font-family: 'Inter', sans-serif;
+    }
+    table {
+        
+        width: 100%;
+        margin-top: 20px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .box {
+        margin: 120px auto;
+        width: 90%;
+        max-width: 1000px;
+        background-color:  #8db3ecff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    
+
+    th {
+        background: var(--primary);
+        color: white;
+        padding: 12px;
+    }
+
+    td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .btn {
+        padding: 7px 15px;
+        background: var(--primary);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .btn:hover { background: var(--accent); }
+</style>
+
+</head>
+<body>
+
+<div class="box">
+    <h2 style="text-align:center; color:var(--primary);">Manage Study Materials</h2>
+
+    <table border="1">
+        <tr>
+            <th>Subject</th>
+            <th>Title</th>
+            <th>description</th>
+            <th>File</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for m in materials %}
+        <tr>
+            <td>{{ m.course.name }}</td>
+            <td>{{ m.title }}</td>
+            <td>{{ m.description }}</td>
+            <td><a href={{ url_for('static', filename='uploads/materials/' ~ m.filename) }} target="_blank" class="btn">Open</a></td>
+            <td><a href={{ url_for('edit_material', id=m.id) }} class="btn">Edit</a></td>
+            <td><a href={{ url_for('delete_material', id=m.id) }} class="btn">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

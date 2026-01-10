@@ -1,0 +1,126 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+
+    <style>
+        :root {
+            --primary: #082b75;    /* Deep blue */
+            --secondary: #8db7e0;  /* Light blue */
+            --accent: #f7b500;     /* Gold button */
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background:  #8db7e0ff; /* Light blue background */
+        }
+
+        body {
+            background-color: var(--background);
+              font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: 150px auto;
+            background: var(--primary);
+            color: var(--text-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        .profile-card p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 8px;
+        }
+
+        .profile-card p strong {
+            color: var(--accent);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--accent-hover);
+        }
+        
+
+    </style>
+</head>
+
+<body>
+
+    <div class="profile-card">
+        <h2>{{ student.name }}'s Profile</h2>
+
+        <p><strong>Student Name:</strong> {{ student.name }}</p>
+        <p><strong>Email:</strong> {{ student.email }}</p>
+        <p><strong>Age:</strong> {{ student.age }}</p>
+        <p><strong>Class:</strong> {{ student.grade }}</p>
+        <p><strong>Courses:</strong><br>
+    {% for course in student.courses %}
+        {{ course.name }}<br>
+    {% else %}
+        Not Enrolled
+    {% endfor %}
+</p>
+        <p><strong>Teachers:</strong><br>
+        {% if teachers %}
+    <ul>
+        {% for teacher in teachers %}
+                {{ teacher.name }} <br>
+
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No teachers assigned yet.</p>
+{% endif %}
+
+        <div class="btn-container">
+            <a href="{{ url_for('student_dashboard') }}" class="btn">← Back to Dashboard</a>
+            <a href="{{ url_for('student_edit_profile') }}" class="btn">Edit Profile</a>
+        </div>
+    </div>
+
+</body>
+</html>

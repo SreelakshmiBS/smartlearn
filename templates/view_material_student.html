@@ -1,0 +1,191 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Study Material</title>
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+            --background: #8db7e0;
+        }
+
+        body {
+            background-color: var(--background);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 120px;
+        }
+
+        table {
+            width: 90%;
+            margin: 40px auto;
+            border-collapse: collapse;
+            background: #8db3ecff;
+            border-radius: 15px;
+            overflow: hidden;
+            color: var(--text-light);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+        }
+
+        tr:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            transition: 0.3s ease;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Custom checkbox styling */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+            user-select: none;
+            color: #082b75; /* primary color */
+            justify-content: center;
+        }
+
+        /* Hide the default checkbox */
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Create a custom checkmark */
+        .custom-checkbox .checkmark {
+            width: 20px;
+            height: 20px;
+            background-color: #ffffff;
+            border: 2px solid #082b75; /* primary color */
+            border-radius: 6px; /* rounded edges */
+            margin-right: 10px;
+            transition: all 0.2s ease;
+            display: inline-block;
+            position: relative;
+        }
+
+        /* Tick mark */
+        .custom-checkbox .checkmark::after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 1px;
+            width: 5px;
+            height: 10px;
+            border: solid #082b75;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Show tick when checked */
+        .custom-checkbox input:checked ~ .checkmark::after {
+            display: block;
+        }
+
+        /* Hover effect */
+        .custom-checkbox:hover .checkmark {
+            background-color: #8db7e0; /* secondary color */
+            border-color: #082b75;
+        }
+
+    </style>
+</head>
+<body>
+
+<h2>Study Materials</h2>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>File</th>
+        <th>View Material</th>
+        <th>Mark Completed</th>
+    </tr>
+
+    {% for material in materials %}
+    <tr>
+        <td>{{ material.title }}</td>
+        <td>{{ material.description }}</td>
+        <td>{{ material.filename }}</td>
+        <td>
+            <a href="{{ url_for('static', filename='uploads/materials/' + material.filename) }}"
+               target="_blank" class="btn">View</a>
+        </td>
+   <td>
+    {% set prog = progress_dict.get(material.id) %}
+    {% if prog and prog.completed %}
+        ✔ Completed on {{ prog.completion_date.strftime('%d-%m-%Y') }}
+    {% else %}
+        <label class="custom-checkbox">
+            <input type="checkbox"
+                   onchange="markCompleted('material', {{ material.id }}, this.checked)">
+            <span class="checkmark"></span> Mark as Completed
+        </label>
+    {% endif %}
+</td>
+
+
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No study materials available</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+function markCompleted(type, id, completed) {
+    fetch("/update_progress", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `type=${type}&id=${id}&completed=${completed}`
+    }).then(response => {
+        if (!response.ok) {
+            alert("Failed to update progress.");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

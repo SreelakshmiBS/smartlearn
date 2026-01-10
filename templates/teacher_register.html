@@ -1,0 +1,175 @@
+
+{% include 'indexheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Registration SmartLearn</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">
+
+  <!-- Theme Style -->
+  <style>
+  :root {
+    --primary: #8db7e0ff;       /* White background */
+    --secondary: #082b75ff;     /* Navy blue card */
+    --accent: #f7b500;        /* Yellow button */
+    --accent-hover: #ffcc33;  /* Lighter yellow hover */
+    --text-primary: #1c1c1c;  /* Dark text for contrast */
+    --text-secondary: #555555;
+    --input-bg: #f2f4f7;      /* Light grey input background */
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    background: var(--primary);
+    color: var(--text-primary);
+  }
+
+
+  nav a {
+    color: #f1f1f1;
+    margin-left: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+  }
+
+  .container {
+    max-width: 950px;
+    background: var(--secondary);
+    padding: 50px;
+    border-radius: 20px;
+    margin: 120px auto;
+    box-shadow: 0 8px 25px rgba(2, 2, 2, 0.2);
+  }
+
+  h2 {
+    text-align: center;
+    color: var(--accent);
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border: none;
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 15px;
+  }
+    select, textarea{
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border: none;
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    font-size: 15px;
+  }
+   
+
+  input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: var(--accent-hover);
+  }
+
+  footer {
+    text-align: center;
+    padding: 25px;
+    color: var(--text-secondary);
+    background: #f7f7f7;
+    margin-top: 50px;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+  }
+
+  .flash {
+    background: #e0e6ee;
+    color: #111;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+</style>
+
+
+</head>
+<body>
+
+  <!-- Registration Form -->
+  <div class="container">
+    <h2>Teacher Registration</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="photo">
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="text" name="qualifications" placeholder="Qualifications" required>
+   <!-- First course (mandatory) -->
+    <select name="course" required>
+        <option value="" disabled selected>Select a course</option>
+        {% for s in courses %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Second course (optional) -->
+    <select name="second_course">
+        <option value="" disabled selected>Select another course (optional)</option>
+        {% for s in courses %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="text" name="availability" placeholder="Availability in years" required>
+    <input type="text" name="years_of_experience" placeholder="Years of Experience" required>
+    <input type="text" name="contact" placeholder="Contact Number" required>
+    <input type="text" name="place" placeholder="Place" required>
+
+    <button type="submit">Register Now</button>
+  </form>
+  </div>
+
+  <!-- Footer -->
+  <!--<footer>
+    © 2025 Grad School LMS | Designed by Sreelakshmi
+  </footer>-->
+
+</body>
+</html>

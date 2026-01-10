@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Courses</title>
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+            --background: #8db7e0ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 0;
+            color: #000; /* default text color black */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff; /* container background white */
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            color: #000; /* text color black */
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .course-card {
+            background-color: #f9f9f9; /* slightly off-white for card */
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            color: #000; /* text inside card black */
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .course-card h3 {
+            margin: 0 0 10px;
+            color: inherit; /* uses card text color */
+        }
+
+        .course-card p {
+            color: inherit;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: var(--text-light);
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My Courses</h2>
+
+    {% if courses %}
+        {% for course in courses %}
+            <div class="course-card">
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+                <a href="{{ url_for('courses') }}" class="btn">Enroll new Course</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align:center; color:#000;">You are not enrolled in any courses.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

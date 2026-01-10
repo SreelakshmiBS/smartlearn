@@ -1,0 +1,101 @@
+{% include 'indexheader.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Our Courses</title>
+
+    <style>
+        :root {
+            --primary: #8db7e0ff;
+            --secondary: #082b75ff;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-primary: #1c1c1c;
+            --text-secondary: #555555;
+            --input-bg: #f2f4f7;
+        }
+
+        body {
+            margin:0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 22px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .course-title {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .course-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .enroll-btn {
+            background: var(--accent);
+            color: var(--secondary);
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .enroll-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .page-title {
+            text-align: center;
+            color: var(--secondary);
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="page-title">'</h1>
+<div class="container">
+    {% for c in courses %}
+    <div class="course-card">
+        <div class="course-title">{{ c.name }}</div>
+        <div class="course-desc">{{ c.description }}</div>
+
+        <form method="GET" action="{{ url_for('student_registration') }}">
+            <center><button type="submit" class="enroll-btn">Enroll Now</button></center>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+

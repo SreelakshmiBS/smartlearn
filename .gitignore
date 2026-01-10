@@ -1,0 +1,23 @@
+# virtual environment
+venv/
+env/
+
+# python cache
+__pycache__/
+*.pyc
+
+# environment variables
+.env
+
+# database
+*.db
+*.sqlite3
+
+# logs
+*.log
+
+# uploads / media
+static/uploads/
+*.mp4
+*.mov
+*.avi

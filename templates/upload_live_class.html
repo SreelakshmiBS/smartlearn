@@ -1,0 +1,119 @@
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Live Class</title>
+
+    <style>
+        :root {
+            --primary: #082b75;      /* Dark blue */
+            --secondary: #8db7e0;    /* Light blue */
+            --accent: #f7b500;       /* Gold buttons */
+            --accent-hover: #ffcc33;
+            --text-light: #ffffff;
+            --text-secondary: #d1d1d1;
+            --background: #8db7e0ff;
+        }
+
+        body {
+              font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-top: 125px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 120px auto;
+            background-color: var(--secondary);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        label {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 15px;
+        }
+
+        input,select, textarea {
+            width: 99%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background-color: #ffffff;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(247, 181, 0, 0.7);
+        }
+
+        button {
+            width: 99%;
+            background-color: var(--accent);
+            color: var(--primary);
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Schedule Live Class</h2>
+
+    <div class="form-container">
+        <form method="POST">
+            <label>Title</label>
+            <input type="text" name="title" required>
+
+            <label>Date</label>
+            <input type="date" name="date" required>
+
+            <label>Time</label>
+            <input type="time" name="time" required>
+
+            <label>Platform</label>
+            <input type="text" name="platform" placeholder="Google Meet, Zoom, Teams..." required>
+
+            <label>Link</label>
+            <input type="url" name="link" placeholder="https://..." required>
+
+            <label>Course</label>
+            <select name="course_id" required>
+                <option value="">-- Select Course --</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Schedule Live Class</button>
+        </form>
+
+    </div>
+
+</body>
+</html>

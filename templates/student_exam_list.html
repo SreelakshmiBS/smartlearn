@@ -1,0 +1,172 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Available Exams | SmartLearn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+    --primary: #082b75;
+    --secondary: #8db7e0;
+    --accent: #f7b500;
+    --accent-hover: #ffcc33;
+    --text-dark: #1b1b1b;
+    --text-light: #ffffff;
+    --background: #8db7e0ff;
+}
+
+body {
+    background: var(--background);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+}
+
+/* ================= Container ================= */
+.dashboard-container {
+    max-width: 1000px;
+    margin: 220px auto;
+    padding: 25px;
+    background: var(--secondary);
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.dashboard-header h2 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+/* ================= Table ================= */
+.exam-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--text-light);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.exam-table thead {
+    background: var(--primary);
+    color: var(--text-light);
+}
+
+.exam-table th,
+.exam-table td {
+    padding: 14px 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.exam-table th {
+    font-weight: 600;
+}
+
+.exam-table tbody tr:nth-child(even) {
+    background: #f5f7fb;
+}
+
+.exam-table tbody tr:hover {
+    background: #eef3ff;
+}
+
+/* ================= Buttons ================= */
+.exam-btn {
+    background: var(--accent);
+    color: var(--text-dark);
+    padding: 6px 14px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    margin: 2px;
+    display: inline-block;
+    font-size: 13px;
+}
+
+.exam-btn:hover {
+    background: var(--accent-hover);
+}
+
+.no-exam {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-header">
+        <h2>Your Assigned Exams</h2>
+    </div>
+
+    {% if exams %}
+    <table class="exam-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Exam Title</th>
+            <th>Created Date</th>
+            <th>Attended Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for exam in exams %}
+        <tr>
+            <td>{{ loop.index }}</td>
+
+            <td>{{ exam.title }}</td>
+
+            <!-- Exam Created Date -->
+            <td>
+                {{ exam.created_at.strftime('%d %b %Y') }}
+            </td>
+
+            <!-- ✅ Attended Date (FIXED) -->
+            <td>
+                {% set date = attempt_dates.get(exam.id) %}
+                {% if date %}
+                    <span title="{{ date }}">{{ date.strftime('%d %b %Y %I:%M %p') }}</span>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            <!-- Actions -->
+            <td>
+                {% if exam.id in attempted_exam_ids %}
+                    <a href="{{ url_for('attend_exam', exam_id=exam.id) }}" class="exam-btn">
+                        Reattempt
+                    </a>
+
+                    {% if exam.id in result_exam_ids %}
+                        <a href="{{ url_for('student_exam_result', exam_id=exam.id) }}" class="exam-btn">
+                            Result
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('attend_exam', exam_id=exam.id) }}" class="exam-btn">
+                        Attend
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+    {% else %}
+        <p class="no-exam">No exams available at the moment.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

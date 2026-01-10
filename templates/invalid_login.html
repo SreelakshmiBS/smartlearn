@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Failed | SmartLearn</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">
+
+  <style>
+    body {
+        font-family: 'Inter', sans-serif;
+      background-color: #8db7e0ff;
+      color: white;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .error-box {
+      background-color: #082b75ff;
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .error-icon {
+      font-size: 60px;
+      color: #ff4c4c;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      color: #f7b500;
+      font-size: 24px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      color: #ccc;
+      margin-bottom: 25px;
+      font-size: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #f7b500;
+      color: #11152b;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #ffcc33;
+    }
+
+    .register {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    .register a {
+      color: #f7b500;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register a:hover {
+      color: #ffcc33;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="error-box">
+    <div class="error-icon">⚠️</div>
+    <h2>Can't Login</h2>
+    <p>Invalid username or password.<br>Please try again or register a new account.</p>
+    <a href="{{ url_for('login') }}" class="btn">Try Again</a>
+
+    <div class="register">
+      
+      <p>New to SmartLearn? Register as:</p>
+      <a href="{{ url_for('student_registration') }}">Student</a> |
+      <a href="{{ url_for('teacher_registration') }}">Teacher</a> |
+      <a href="{{ url_for('home') }}">Home</a>
+    </div>
+    </div>
+  </div>
+
+</body>
+</html>

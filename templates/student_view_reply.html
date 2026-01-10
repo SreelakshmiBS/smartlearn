@@ -1,0 +1,183 @@
+{% include 'studentheader.html' %}
+<style>
+:root {
+    --primary:#8db7e0ff;     /* Dark blue */
+    --secondary:#082b75ff;    /* Light blue */
+    --accent: #f7b500;           /* Gold */
+    --accent-hover: #ffcc33;     /* Lighter gold */
+    --text-primary: #ffffff;     /* White text */
+}
+
+/* Body */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary);
+    padding: 30px;
+}
+
+.feedback-container {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 120px; /* Push cards down from header */
+    margin: 0 auto;
+}
+
+
+/* Card */
+.feedback-card {
+    margin:120px,auto;
+    background-color: var(--secondary);
+    color: var(--text-primary);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feedback-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.pending {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+.replied {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+/* Labels */
+.feedback-section .label,
+.reply-section .label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 0.95rem;
+}
+
+/* Dates */
+.date {
+    font-size: 0.85rem;
+    color: var(--accent-hover);
+    margin-bottom: 8px;
+}
+
+/* Message Box */
+.feedback-message,
+.message-box,
+.reply-box,
+.waiting-box {
+    background: rgba(255,255,255,0.1);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+/* Reply Text */
+.reply-text {
+    background: rgba(0,0,0,0.25);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Textarea for Reply */
+.reply-box textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.reply-box textarea::placeholder {
+    color: #666;
+}
+
+/* Reply Button */
+.reply-btn {
+    margin-top: 10px;
+    background-color: var(--accent);
+    color: var(--secondary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.reply-btn:hover {
+    background-color: var(--accent-hover);
+}
+</style>
+
+
+
+<div class="feedback-container">
+    {% for fb in feedbacks %}
+        <div class="feedback-card">
+
+            <!-- Status Badge -->
+            <div class="feedback-header">
+                <span class="badge {{ 'replied' if fb.reply else 'pending' }}">
+                    {{ 'Replied' if fb.reply else 'Waiting for Reply' }}
+                </span>
+            </div>
+
+            <!-- Student Feedback -->
+            <div class="feedback-section">
+                <p class="label">Your Feedback</p>
+                <p class="date">
+                    Submitted on: {{ fb.created_at.strftime('%d %B %Y, %I:%M %p') }}
+                </p>
+
+                <div class="message-box">
+                    {{ fb.message }}
+                </div>
+            </div>
+
+            <!-- Teacher Reply -->
+            <div class="reply-section">
+                <p class="label">Teacher Reply</p>
+
+                {% if fb.reply %}
+                    <p class="date">
+                        Replied on: {{ fb.replied_at.strftime('%d %B %Y, %I:%M %p') }}
+                    </p>
+
+                    <div class="reply-box">
+                        {{ fb.reply }}
+                    </div>
+                {% else %}
+                    <div class="waiting-box">
+                        Waiting for reply
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    {% endfor %}
+</div>

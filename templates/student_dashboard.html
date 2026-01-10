@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <style>
+        :root {
+            --primary: #8db7e0ff;
+            --secondary: #082b75ff;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-primary: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--primary);
+            display: flex;
+        }
+
+        /* ================= Sidebar ================= */
+        .sidebar {
+            width: 230px;
+            background-color: var(--secondary);
+            height: 100vh;
+            padding: 25px 15px;
+            color: white;
+            position: fixed;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: var(--accent);
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* ================= Main ================= */
+        .main {
+            margin-left: 260px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        /* ================= TOP BOX ================= */
+        .enrolled-box {
+            background-color: var(--secondary);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .welcome-text {
+            margin: 0;
+            font-size: 22px;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .enrolled-inline {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .enrolled-title {
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .course-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .course-list li {
+            background-color: var(--accent);
+            color: var(--secondary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ================= Cards ================= */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--secondary);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card h2 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: var(--secondary);
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .progress-bar-container {
+            background-color: #ddd;
+            border-radius: 10px;
+            height: 12px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* ================= SAFE Exam Results Styling ================= */
+        .exam-results-card .exam-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+        }
+
+        .exam-results-card .exam-info {
+            text-align: left;
+        }
+
+        .exam-results-card .exam-info p {
+            margin: 2px 0;
+        }
+
+        .exam-results-card .course-name {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .exam-results-card .view-btn {
+            padding: 8px 14px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= Sidebar ================= -->
+<div class="sidebar">
+    <h2>{{ student.name }}'s Profile</h2>
+    <a class="active" href="{{ url_for('student_profile') }}">Profile</a>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('change_password') }}">Change Password</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+<!-- ================= Main ================= -->
+<div class="main">
+
+    <!-- TOP BOX -->
+    <div class="enrolled-box">
+        <h1 class="welcome-text">Welcome, {{ student.name }}!</h1>
+
+        <div class="enrolled-inline">
+            <span class="enrolled-title">You are enrolled in:</span>
+            <ul class="course-list">
+                {% for course in student.courses %}
+                    <li>{{ course.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- DASHBOARD CARDS -->
+    <div class="card-grid">
+
+        <div class="card">
+            <h2>Profile</h2>
+            <p>View and Edit Your Profile</p>
+            <a href="{{ url_for('student_profile') }}" class="btn">View</a>
+        </div>
+
+        <div class="card">
+            <h2>Attendance</h2>
+            <p>{{ percent_attendance }}% in {{ total_days }} days</p>
+            <a href="{{ url_for('view_attendance') }}" class="btn">View</a>
+        </div>
+
+        <div class="card">
+            <h2>Total Enrolled Courses</h2>
+            <p>{{ student.courses|length }} courses</p>
+            <a href="{{ url_for('enrolled_courses') }}" class="btn">View</a>
+        </div>
+
+        <div class="card">
+            <h2>View Classes</h2>
+            <p>Recorded: {{ recorded_classes|length }} | Live: {{ live_classes|length }}</p>
+            <a href="{{ url_for('student_view_classes') }}" class="btn">View</a>
+        </div>
+
+        <div class="card">
+            <h2>Study Materials</h2>
+            <p>{{ materials|length }} materials available</p>
+            {% if materials %}
+                <a href="{{ url_for('view_material_student', course_id=materials[0].course_id) }}" class="btn">View</a>
+            {% else %}
+                <button class="btn" disabled>No Materials</button>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>Exams</h2>
+            <p>{{ exam_count }} assigned</p>
+            <a href="{{ url_for('student_exams') }}" class="btn">View</a>
+        </div>
+
+        <!-- ✅ EXAM RESULTS CARD -->
+        <div class="card exam-results-card">
+            <h2>Exam Results</h2>
+            <p>Total Attended: {{ exams_attended|length }}</p>
+
+            {% if exams_attended %}
+                {% for exam in exams_attended %}
+                    <div class="exam-item">
+                        <div class="exam-info">
+                            <p><strong>{{ exam.title }}</strong></p>
+                            <p class="course-name">
+                                {{ exam.course.name if exam.course else 'N/A' }}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('view_exam_result', exam_id=exam.id) }}"
+                           class="btn view-btn">View Result</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No exams attended yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h2>View Progress</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: {{ progress }}%;"></div>
+            </div>
+            <p>{{ progress }}% Completed</p>
+            <p>{{ student.name }} completed {{ completed_items }} out of {{ total_items }}</p>
+            <a href="{{ url_for('student_progress') }}" class="btn">View</a>
+        </div>
+
+        <div class="card">
+            <h2>Give Feedback</h2>
+            <p>Give feedback to your teacher</p>
+            <a href="{{ url_for('student_feedback') }}" class="btn">Feedback</a>
+            <a href="{{ url_for('student_my_feedbacks') }}" class="btn">View Reply</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

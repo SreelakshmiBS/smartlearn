@@ -1,0 +1,106 @@
+
+{% include 'teacher_header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Students View</title>
+ <style>
+    :root {
+    --primary: #8db7e0ff;       /* White background */
+    --secondary: #082b75ff;     /* Navy blue card */
+    --accent: #f7b500;        /* Yellow button */
+    --accent-hover: #ffcc33;  /* Lighter yellow hover */
+    --text-primary: #1c1c1c;  /* Dark text for contrast */
+    --text-secondary: #555555;
+    --input-bg: #f2f4f7;      /* Light grey input background */
+  }
+    /* Header blue color */
+    .modal-header {
+        background-color: #082b75ff !important;
+        color: white !important;
+        
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1); 
+        justify-content: center;
+    }
+
+
+    body {
+        font-family: 'Inter', sans-serif;
+      background-color: #8db7e0ff;
+      color: #333;
+      margin: 20px;
+    }
+    
+   table {
+      margin: 120px auto;
+      width: 95%;
+      max-width: 1000px;
+      background-color: #8db3ecff;
+      padding: 30px;
+      border-radius: 15px;        
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+      border-collapse: separate;  
+      border-spacing: 0;
+      overflow: hidden;  
+   }          
+
+    th, td {
+      border:0.5px solid #ccc;
+      padding: 10px;
+      text-align: Center;
+    }
+    th {
+      background-color: #082b75ff;
+      color: white;
+    }
+    button {
+      margin-top: 15px;
+      background-color: #082b75ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      color: #ffcc33;
+    }
+  
+  </style>
+
+ 
+
+<table border="1" cellpadding="10">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Grade</th>
+    <th>Course</th>
+  </tr>
+
+  {% for student in students %}
+  <tr>
+    <td>{{ student.name }}</td>
+    <td>{{ student.email }}</td>
+    <td>{{ student.grade}}</td>
+    <td>
+      {% if student.courses %}
+        {% for course in student.courses %}
+          {{ course.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      {% else %}
+        N/A
+      {% endif %}
+
+  </tr>
+  {% else %}
+  <tr>
+    <td colspan="3">No students assigned yet.</td>
+  </tr>
+  {% endfor %}
+</table>

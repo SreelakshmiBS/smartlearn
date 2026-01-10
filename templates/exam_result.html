@@ -1,0 +1,97 @@
+{% include 'studentheader.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Result | SmartLearn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root {
+            --primary: #082b75;
+            --secondary: #8db7e0;
+            --accent: #f7b500;
+            --accent-hover: #ffcc33;
+            --text-dark: #1b1b1b;
+            --text-light: #ffffff;
+            --background: #8db7e0ff;
+        }
+
+        body {
+            background: var(--background);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+        }
+
+        .result-container {
+            max-width: 600px;
+            margin: 150px auto;
+            padding: 30px;
+            background: var(--secondary);
+            border-radius: 15px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .status {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .pass {
+            color: green;
+        }
+
+        .fail {
+            color: red;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--accent-hover);
+        }
+    </style>
+</head>
+<body>
+
+<div class="result-container">
+    <h2>Exam Result</h2>
+
+    <p><strong>Score:</strong> {{ result.score }} / {{ result.total }}</p>
+    <p><strong>Submitted On:</strong> {{ result.submitted_at.strftime('%d-%m-%Y %H:%M:%S') }}</p>
+
+    {% if passed %}
+    <p class="status pass">PASS</p>
+{% else %}
+    <p class="status fail">FAIL</p>
+{% endif %}
+
+    <a href="{{ url_for('student_exams') }}" class="back-btn">Back to Exams</a>
+</div>
+
+</body>
+</html>
