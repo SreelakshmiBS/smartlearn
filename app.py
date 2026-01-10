@@ -46,15 +46,29 @@ app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024 * 1024  # 1 GB limit for vide
 app.config["MATERIAL_FOLDER"] = MATERIAL_UPLOAD_FOLDER
 
 # --- Database Configuration ---
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    BASE_DIR, "database.db"
-)
+# --- Database Configuration ---
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+# Fix if URL starts with 'postgres://'
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 # --- Initialize DB and Migrations ---
 db.init_app(app)
 migrate = Migrate(app, db)
 
+
+@app.route("/db-test")
+def db_test():
+    try:
+        db.session.execute("SELECT 1")
+        return "✅ Connected to PostgreSQL"
+    except Exception as e:
+        return f" DB Error: {e}"
 
 @app.route("/")  # home page
 def home():
