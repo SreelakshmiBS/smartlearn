@@ -34,7 +34,7 @@ class Course(db.Model):
     __tablename__ = 'course'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
-    description = db.Column(db.String(255))
+    description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.Date)
 
     teachers = db.relationship('Teacher', secondary=teacher_course, back_populates='courses')
