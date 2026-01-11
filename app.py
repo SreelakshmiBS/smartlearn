@@ -101,7 +101,7 @@ def create_default_admin():
             admin = Admin(
                 name="Admin",
                 email=admin_email,
-                password=generate_password_hash("admin123")
+                password=generate_password_hash("admin@123")
             )
             db.session.add(admin)
             db.session.commit()
