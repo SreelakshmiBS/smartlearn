@@ -17,58 +17,74 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import joinedload
+from sqlalchemy import text
 import re
+from dotenv import load_dotenv
+
+# --------------------------------------------------
+# Load environment variables
+# --------------------------------------------------
+load_dotenv()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "THIS_IS_A_FIXED_SECRET_KEY"
 
-# --- Base Directory ---
+# --------------------------------------------------
+# Base Directory
+# --------------------------------------------------
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-# --- Upload Configuration ---
+# --------------------------------------------------
+# Upload Configuration
+# --------------------------------------------------
 VIDEO_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static/uploads/videos")
 PROFILE_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static/photos")
 MATERIAL_UPLOAD_FOLDER = os.path.join(BASE_DIR, "static/uploads/materials")
 
-# Create folders if they don't exist
 os.makedirs(VIDEO_UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROFILE_UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(MATERIAL_UPLOAD_FOLDER, exist_ok=True)
 
-# Allowed video extensions
 ALLOWED_EXTENSIONS = {"mp4", "mkv", "webm"}
 ALLOWED_MATERIALS = {"pdf", "docx", "pptx", "ppt", "zip", "txt", "jpg", "jpeg", "png"}
 
-# Configure app
-app.config["UPLOAD_FOLDER_VIDEOS"] = VIDEO_UPLOAD_FOLDER  # For recorded videos
-app.config["UPLOAD_FOLDER_PHOTOS"] = PROFILE_UPLOAD_FOLDER  # For profile photos
-app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024 * 1024  # 1 GB limit for videos
+app.config["UPLOAD_FOLDER_VIDEOS"] = VIDEO_UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER_PHOTOS"] = PROFILE_UPLOAD_FOLDER
 app.config["MATERIAL_FOLDER"] = MATERIAL_UPLOAD_FOLDER
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024 * 1024  # 1GB
 
-# --- Database Configuration ---
-# --- Database Configuration ---
-DATABASE_URL = os.environ.get("DATABASE_URL")
+# --------------------------------------------------
+# Database Configuration (PostgreSQL - Render)
+# --------------------------------------------------
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Fix if URL starts with 'postgres://'
-if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+if not DATABASE_URL:
+    raise RuntimeError(" DATABASE_URL is not set. Check your .env or Render env vars.")
+
+# Fix Render postgres:// issue
+if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-
-# --- Initialize DB and Migrations ---
+# --------------------------------------------------
+# Initialize DB & Migrations
+# --------------------------------------------------
 db.init_app(app)
 migrate = Migrate(app, db)
 
-
+# --------------------------------------------------
+# Test Database Connection
+# --------------------------------------------------
 @app.route("/db-test")
 def db_test():
     try:
-        db.session.execute("SELECT 1")
+        db.session.execute(text("SELECT 1"))
         return "✅ Connected to PostgreSQL"
     except Exception as e:
-        return f" DB Error: {e}"
+        return f"❌ DB Error: {e}"
+
 
 @app.route("/")  # home page
 def home():
