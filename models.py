@@ -8,9 +8,9 @@ class Admin(db.Model):
     __tablename__ = 'admin'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(200))
+    name = db.Column(db.String(10000))
+    email = db.Column(db.String(12000), unique=True)
+    password = db.Column(db.String(20000))
 
 # =========================
 # ASSOCIATION TABLES
@@ -33,7 +33,7 @@ teacher_course = db.Table(
 class Course(db.Model):
     __tablename__ = 'course'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(1000), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.Date)
 
@@ -51,16 +51,16 @@ class Teacher(db.Model):
     __tablename__ = 'teacher'
 
     id = db.Column(db.Integer, primary_key=True)
-    photo = db.Column(db.String(200), default='default.jpg')
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    qualifications = db.Column(db.String(200), nullable=False)
-    availability = db.Column(db.String(100), nullable=False)
+    photo = db.Column(db.String(2000), default='default.jpg')
+    name = db.Column(db.String(1000), nullable=False)
+    email = db.Column(db.String(1000), unique=True)
+    password = db.Column(db.String(1000), nullable=False)
+    qualifications = db.Column(db.String(2000), nullable=False)
+    availability = db.Column(db.String(1000), nullable=False)
     years_of_experience = db.Column(db.Integer, nullable=False)
-    contact = db.Column(db.String(15), nullable=False)
-    place = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.String(20),default="Active")
+    contact = db.Column(db.String(150), nullable=False)
+    place = db.Column(db.String(1000), nullable=False)
+    status = db.Column(db.String(200),default="Active")
 
     courses = db.relationship('Course', secondary=teacher_course, back_populates='teachers',cascade='all,delete')
     attendance = db.relationship('Attendance', back_populates='teacher', cascade='all, delete')
@@ -77,11 +77,11 @@ class Student(db.Model):
     __tablename__ = 'student'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(1000), nullable=False)
+    email = db.Column(db.String(1000), unique=True, nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    grade = db.Column(db.String(10), nullable=False)
+    grade = db.Column(db.String(100), nullable=False)
     courses = db.relationship('Course', secondary=student_course, back_populates='students')
 
     attendance = db.relationship('Attendance', back_populates='student', cascade='all, delete')
@@ -100,7 +100,7 @@ class Attendance(db.Model):
     student_id = db.Column(db.Integer,db.ForeignKey('student.id', name='fk_attendance_student'),nullable=False)
     teacher_id = db.Column(db.Integer,db.ForeignKey('teacher.id', name='fk_attendance_teacher'),nullable=False)
     date = db.Column(db.Date, nullable=False)
-    status = db.Column(db.String(10), nullable=False)
+    status = db.Column(db.String(100), nullable=False)
 
     student = db.relationship('Student', back_populates='attendance')
     teacher = db.relationship('Teacher', back_populates='attendance')
@@ -113,9 +113,9 @@ class RecordedClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer,db.ForeignKey('teacher.id', name='fk_recorded_teacher'),nullable=False)
     course_id = db.Column(db.Integer,db.ForeignKey('course.id', name='fk_recorded_course'),nullable=True)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(2000), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    filename = db.Column(db.String(300), nullable=False)
+    filename = db.Column(db.String(3000), nullable=False)
 
     teacher = db.relationship('Teacher', back_populates='recorded_classes')
     course = db.relationship('Course', back_populates='recorded_classes')
@@ -130,11 +130,11 @@ class LiveClass(db.Model):
     teacher_id = db.Column(db.Integer,db.ForeignKey('teacher.id', name='fk_live_teacher'),nullable=False)
     course_id = db.Column(db.Integer,db.ForeignKey('course.id', name='fk_live_course'),nullable=True)
 
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(2000), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
-    platform = db.Column(db.String(100))
-    link = db.Column(db.String(300), nullable=False)
+    platform = db.Column(db.String(1000))
+    link = db.Column(db.String(3000), nullable=False)
 
     teacher = db.relationship('Teacher', back_populates='live_classes')
     course = db.relationship('Course', back_populates='live_classes')
@@ -148,9 +148,9 @@ class StudyMaterial(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer,db.ForeignKey('teacher.id', name='fk_material_teacher'),nullable=False)
     course_id = db.Column(db.Integer,db.ForeignKey('course.id', name='fk_material_course'),nullable=False)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(2000), nullable=False)
     description = db.Column(db.Text)
-    filename = db.Column(db.String(300))
+    filename = db.Column(db.String(3000))
     upload_date = db.Column(db.Date, nullable=False)
 
     teacher = db.relationship('Teacher', back_populates='materials')
@@ -187,7 +187,7 @@ class Exam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer,db.ForeignKey('teacher.id', name='fk_exam_teacher'),nullable=False)
     course_id = db.Column(db.Integer,db.ForeignKey('course.id', name='fk_exam_course'),nullable=False)
-    title = db.Column(db.String(200), nullable=False)
+    title = db.Column(db.String(2000), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     teacher = db.relationship('Teacher', back_populates='exams')
@@ -219,11 +219,11 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     exam_id = db.Column(db.Integer,db.ForeignKey('exam.id', name='fk_question_exam'),nullable=False)
     question_text = db.Column(db.Text, nullable=False)
-    option_a = db.Column(db.String(200), nullable=False)
-    option_b = db.Column(db.String(200), nullable=False)
-    option_c = db.Column(db.String(200))
-    option_d = db.Column(db.String(200))
-    correct_option = db.Column(db.String(1), nullable=False)
+    option_a = db.Column(db.String(2000), nullable=False)
+    option_b = db.Column(db.String(2000), nullable=False)
+    option_c = db.Column(db.String(2000))
+    option_d = db.Column(db.String(2000))
+    correct_option = db.Column(db.String(10), nullable=False)
 
     exam = db.relationship('Exam', back_populates='questions')
 
@@ -236,7 +236,7 @@ class StudentAnswer(db.Model):
     student_id = db.Column(db.Integer,db.ForeignKey('student.id', name='fk_answer_student'),nullable=False)
     exam_id = db.Column(db.Integer,db.ForeignKey('exam.id', name='fk_answer_exam'),nullable=False)
     question_id = db.Column(db.Integer,db.ForeignKey('question.id', name='fk_answer_question'),nullable=False)
-    selected_option = db.Column(db.String(1), nullable=False)
+    selected_option = db.Column(db.String(10), nullable=False)
 
     student = db.relationship('Student', back_populates='answers')
     
