@@ -83,8 +83,35 @@ def db_test():
         db.session.execute(text("SELECT 1"))
         return "✅ Connected to PostgreSQL"
     except Exception as e:
-        return f"❌ DB Error: {e}"
+        return f" DB Error: {e}"
+    
+from sqlalchemy.exc import IntegrityError
 
+def create_default_admin():
+    with app.app_context():
+        admin_email = "admin@gmail.com"
+
+        existing_admin = Admin.query.filter_by(email=admin_email).first()
+
+        if existing_admin:
+            print("ℹDefault admin already exists. Skipping creation.")
+            return
+
+        try:
+            admin = Admin(
+                name="Admin",
+                email=admin_email,
+                password=generate_password_hash("admin123")
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("Default admin created successfully")
+
+        except IntegrityError:
+            db.session.rollback()
+            print("Admin already exists (IntegrityError handled)")
+
+create_default_admin()
 
 @app.route("/")  # home page
 def home():
