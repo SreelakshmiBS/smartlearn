@@ -11,9 +11,3 @@ __pycache__/
 
 # logs
 *.log
-
-# uploads / media
-static/uploads/
-*.mp4
-*.mov
-*.avi
