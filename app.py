@@ -111,7 +111,9 @@ def create_default_admin():
             db.session.rollback()
             print("Admin already exists (IntegrityError handled)")
 
-create_default_admin()
+with app.app_context():
+    db.create_all()       
+    create_default_admin()
 
 @app.route("/")  # home page
 def home():
