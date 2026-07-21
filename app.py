@@ -88,28 +88,27 @@ def db_test():
 from sqlalchemy.exc import IntegrityError
 
 def create_default_admin():
-    with app.app_context():
-        admin_email = "admin@gmail.com"
+    admin_email = "admin@gmail.com"
 
-        existing_admin = Admin.query.filter_by(email=admin_email).first()
+    existing_admin = Admin.query.filter_by(email=admin_email).first()
 
-        if existing_admin:
-            print("ℹDefault admin already exists. Skipping creation.")
-            return
+    if existing_admin:
+        print("ℹ Default admin already exists. Skipping creation.")
+        return
 
-        try:
-            admin = Admin(
-                name="Admin",
-                email=admin_email,
-                password=generate_password_hash("admin@123")
-            )
-            db.session.add(admin)
-            db.session.commit()
-            print("Default admin created successfully")
+    try:
+        admin = Admin(
+            name="Admin",
+            email=admin_email,
+            password=generate_password_hash("admin@123")
+        )
+        db.session.add(admin)
+        db.session.commit()
+        print("✅ Default admin created successfully")
 
-        except IntegrityError:
-            db.session.rollback()
-            print("Admin already exists (IntegrityError handled)")
+    except IntegrityError:
+        db.session.rollback()
+        print("ℹ Admin already exists (IntegrityError handled)")
 
 with app.app_context():
     db.create_all()       
